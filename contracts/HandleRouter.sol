@@ -9,7 +9,7 @@ import './libraries/SafeMath.sol';
 import './interfaces/IERC20.sol';
 import './interfaces/IWETH.sol';
 
-contract HandleRouter is IUniswapV2Router02 {
+contract HandleRouter is IUniswapV2Router01 {
     using SafeMath for uint;
 
     address public immutable override factory;
@@ -58,6 +58,13 @@ contract HandleRouter is IUniswapV2Router02 {
             }
         }
     }
+
+    function pairFor(
+        address tokenA,
+        address tokenB
+    ) external view returns (address pair) {
+        pair = UniswapV2Library.pairFor(factory, tokenA, tokenB);
+    }
     
     function addLiquidity(
         address tokenA,
@@ -69,11 +76,16 @@ contract HandleRouter is IUniswapV2Router02 {
         address to,
         uint deadline
     ) external virtual override ensure(deadline) returns (uint amountA, uint amountB, uint liquidity) {
+        amountA = 1;
+        amountB = 1;
         (amountA, amountB) = _addLiquidity(tokenA, tokenB, amountADesired, amountBDesired, amountAMin, amountBMin);
         address pair = UniswapV2Library.pairFor(factory, tokenA, tokenB);
+
         TransferHelper.safeTransferFrom(tokenA, msg.sender, pair, amountA);
         TransferHelper.safeTransferFrom(tokenB, msg.sender, pair, amountB);
         liquidity = IUniswapV2Pair(pair).mint(to);
+
+        //liquidity = 0;
     }
 
     function addLiquidityETH(
@@ -181,7 +193,7 @@ contract HandleRouter is IUniswapV2Router02 {
         uint amountETHMin,
         address to,
         uint deadline
-    ) public virtual override ensure(deadline) returns (uint amountETH) {
+    ) public virtual ensure(deadline) returns (uint amountETH) {
         (, amountETH) = removeLiquidity(
             token,
             WETH,
@@ -204,7 +216,7 @@ contract HandleRouter is IUniswapV2Router02 {
         address to,
         uint deadline,
         bool approveMax, uint8 v, bytes32 r, bytes32 s
-    ) external virtual override returns (uint amountETH) {
+    ) external virtual returns (uint amountETH) {
         address pair = UniswapV2Library.pairFor(factory, token, WETH);
         uint value = approveMax ? uint(-1) : liquidity;
         IUniswapV2Pair(pair).permit(msg.sender, address(this), value, deadline, v, r, s);
@@ -215,7 +227,7 @@ contract HandleRouter is IUniswapV2Router02 {
 
     // **** SWAP ****
     // requires the initial amount to have already been sent to the first pair
-    function _swap(uint[] memory amounts, address[] memory path, address _to) internal virtual {
+    function _swap(uint[] memory amounts, address[] memory path, address _to) internal {
         for (uint i; i < path.length - 1; i++) {
             (address input, address output) = (path[i], path[i + 1]);
             (address token0,) = UniswapV2Library.sortTokens(input, output);
@@ -330,7 +342,7 @@ contract HandleRouter is IUniswapV2Router02 {
 
     // **** SWAP (supporting fee-on-transfer tokens) ****
     // requires the initial amount to have already been sent to the first pair
-    function _swapSupportingFeeOnTransferTokens(address[] memory path, address _to) internal virtual {
+    function _swapSupportingFeeOnTransferTokens(address[] memory path, address _to) internal {
         for (uint i; i < path.length - 1; i++) {
             (address input, address output) = (path[i], path[i + 1]);
             (address token0,) = UniswapV2Library.sortTokens(input, output);
@@ -355,7 +367,7 @@ contract HandleRouter is IUniswapV2Router02 {
         address[] calldata path,
         address to,
         uint deadline
-    ) external virtual override ensure(deadline) {
+    ) external ensure(deadline) {
         TransferHelper.safeTransferFrom(
             path[0], msg.sender, UniswapV2Library.pairFor(factory, path[0], path[1]), amountIn
         );
@@ -375,7 +387,6 @@ contract HandleRouter is IUniswapV2Router02 {
     )
         external
         virtual
-        override
         payable
         ensure(deadline)
     {
@@ -400,7 +411,7 @@ contract HandleRouter is IUniswapV2Router02 {
     )
         external
         virtual
-        override
+
         ensure(deadline)
     {
         require(path[path.length - 1] == WETH, 'HandleRouter: INVALID_PATH');
@@ -415,15 +426,14 @@ contract HandleRouter is IUniswapV2Router02 {
     }
 
     // **** LIBRARY FUNCTIONS ****
-    function quote(uint amountA, uint reserveA, uint reserveB) public pure virtual override returns (uint amountB) {
+    function quote(uint amountA, uint reserveA, uint reserveB) public override pure returns (uint amountB) {
         return UniswapV2Library.quote(amountA, reserveA, reserveB);
     }
 
     function getAmountOut(uint amountIn, uint reserveIn, uint reserveOut)
         public
-        pure
-        virtual
         override
+        pure
         returns (uint amountOut)
     {
         return UniswapV2Library.getAmountOut(amountIn, reserveIn, reserveOut);
@@ -431,9 +441,8 @@ contract HandleRouter is IUniswapV2Router02 {
 
     function getAmountIn(uint amountOut, uint reserveIn, uint reserveOut)
         public
-        pure
-        virtual
         override
+        pure
         returns (uint amountIn)
     {
         return UniswapV2Library.getAmountIn(amountOut, reserveIn, reserveOut);
@@ -441,9 +450,8 @@ contract HandleRouter is IUniswapV2Router02 {
 
     function getAmountsOut(uint amountIn, address[] memory path)
         public
-        view
-        virtual
         override
+        view
         returns (uint[] memory amounts)
     {
         return UniswapV2Library.getAmountsOut(factory, amountIn, path);
@@ -451,9 +459,8 @@ contract HandleRouter is IUniswapV2Router02 {
 
     function getAmountsIn(uint amountOut, address[] memory path)
         public
-        view
-        virtual
         override
+        view
         returns (uint[] memory amounts)
     {
         return UniswapV2Library.getAmountsIn(factory, amountOut, path);
