@@ -8,7 +8,16 @@ module.exports = async (deployer, network, accounts) => {
       '0xbEE597Ad7674a9E92bc284515d35Fd20E2b81371',
       '0x7FB799BeCD588f2f6395DCc17f54C1fF350D2464'
     )
-    console.log(address)
+    //console.log(address)
+
+    await router.getReserves(
+      '0xbEE597Ad7674a9E92bc284515d35Fd20E2b81371',
+      '0x7FB799BeCD588f2f6395DCc17f54C1fF350D2464'
+    )
+
+    const factory = await router.factory();
+    console.log('factory')
+    console.log(factory)
 
     await router.addLiquidity(
       '0xbEE597Ad7674a9E92bc284515d35Fd20E2b81371',
