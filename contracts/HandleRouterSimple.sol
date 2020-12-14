@@ -42,20 +42,20 @@ contract HandleRouterSimple {
         }
 
         (uint reserveA, uint reserveB) = UniswapV2Library.getReserves(factory, tokenA, tokenB);
-        // if (reserveA == 0 && reserveB == 0) {
-        //     (amountA, amountB) = (amountADesired, amountBDesired);
-        // } else {
-        //     uint amountBOptimal = UniswapV2Library.quote(amountADesired, reserveA, reserveB);
-        //     if (amountBOptimal <= amountBDesired) {
-        //         require(amountBOptimal >= amountBMin, 'HandleRouter: INSUFFICIENT_B_AMOUNT');
-        //         (amountA, amountB) = (amountADesired, amountBOptimal);
-        //     } else {
-        //         uint amountAOptimal = UniswapV2Library.quote(amountBDesired, reserveB, reserveA);
-        //         assert(amountAOptimal <= amountADesired);
-        //         require(amountAOptimal >= amountAMin, 'HandleRouter: INSUFFICIENT_A_AMOUNT');
-        //         (amountA, amountB) = (amountAOptimal, amountBDesired);
-        //     }
-        // }
+        if (reserveA == 0 && reserveB == 0) {
+            (amountA, amountB) = (amountADesired, amountBDesired);
+        } else {
+            uint amountBOptimal = UniswapV2Library.quote(amountADesired, reserveA, reserveB);
+            if (amountBOptimal <= amountBDesired) {
+                require(amountBOptimal >= amountBMin, 'HandleRouter: INSUFFICIENT_B_AMOUNT');
+                (amountA, amountB) = (amountADesired, amountBOptimal);
+            } else {
+                uint amountAOptimal = UniswapV2Library.quote(amountBDesired, reserveB, reserveA);
+                assert(amountAOptimal <= amountADesired);
+                require(amountAOptimal >= amountAMin, 'HandleRouter: INSUFFICIENT_A_AMOUNT');
+                (amountA, amountB) = (amountAOptimal, amountBDesired);
+            }
+        }
     }
 
     function pairFor(address tokenA, address tokenB) public returns (address) {

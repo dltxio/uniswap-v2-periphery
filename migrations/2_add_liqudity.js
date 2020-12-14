@@ -1,4 +1,4 @@
-const HandleRouter = artifacts.require('HandleRouter')
+const HandleRouter = artifacts.require('HandleRouterSimple')
 
 module.exports = async (deployer, network, accounts) => {
   if (network === 'development') {

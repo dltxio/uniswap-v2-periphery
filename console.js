@@ -68,15 +68,15 @@ const tx = {
   to: '0xE7de09e38e9e1D32869F103DF85A6ed78bBB6abf',
   value: '0x00',
   data: _data,
-  chainId: 3
+  chainId: 3,
 }
 
-web3.eth.getTransactionCount(meta_mask_linux_account_2, 'pending').then(nonce => {
+web3.eth.getTransactionCount(meta_mask_linux_account_2, 'pending').then((nonce) => {
   console.log(nonce)
 })
 
 web3.eth.accounts
   .signTransaction(tx, '0x2cccc34c1f3028d05b2a617d05ce60711258a0dd344a12f33dab6cc87aef6135')
-  .then(signed => {
+  .then((signed) => {
     web3.eth.sendSignedTransaction(signed.rawTransaction).on('receipt', console.log)
   })
