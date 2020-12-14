@@ -84,9 +84,7 @@ contract HandleRouter is IUniswapV2Router01 {
 
         TransferHelper.safeTransferFrom(tokenA, msg.sender, pair, amountA);
         TransferHelper.safeTransferFrom(tokenB, msg.sender, pair, amountB);
-        //liquidity = IUniswapV2Pair(pair).mint(to);
-
-        liquidity = 0;
+        liquidity = IUniswapV2Pair(pair).mint(to);
     }
 
     function addLiquidityETH(

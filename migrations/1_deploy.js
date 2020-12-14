@@ -1,4 +1,4 @@
-const HandleRouter = artifacts.require('HandleRouterSimple')
+const HandleRouter = artifacts.require('HandleRouter')
 
 module.exports = async (deployer) => {
   const factory = '0x0075138782759B49c760832329eee046fddAD920'
