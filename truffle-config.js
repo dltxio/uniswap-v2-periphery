@@ -25,14 +25,13 @@ module.exports = {
       timeoutBlocks: 200,
       skipDryRun: true
     },
-    goerli: {
-      provider: () =>
-        new HDWalletProvider(process.env.GOERLI_MNEMONIC, process.env.GOERLI_URL),
-      network_id: 5,
+    kovan: {
+      provider: () => new HDWalletProvider(process.env.KOVAN_MNEMONIC, process.env.KOVAN_URL),
+      network_id: 42,
       gas: 5500000,
       confirmations: 2,
       timeoutBlocks: 200,
-      skipDryRun: true,
+      skipDryRun: true
     },
     main: {
       provider: () => {

@@ -1,33 +1,33 @@
-const HandleRouter = artifacts.require('HandleRouterSimple')
+// const HandleRouter = artifacts.require('HandleRouterSimple')
 
-module.exports = async (deployer, network, accounts) => {
-  if (network === 'development') {
-    const router = await HandleRouter.deployed()
+// module.exports = async (deployer, network, accounts) => {
+//   if (network === 'development') {
+//     const router = await HandleRouter.deployed()
 
-    const address = await router.pairFor(
-      '0xbEE597Ad7674a9E92bc284515d35Fd20E2b81371',
-      '0x7FB799BeCD588f2f6395DCc17f54C1fF350D2464'
-    )
-    //console.log(address)
+//     const address = await router.pairFor(
+//       '0xbEE597Ad7674a9E92bc284515d35Fd20E2b81371',
+//       '0x7FB799BeCD588f2f6395DCc17f54C1fF350D2464'
+//     )
+//     //console.log(address)
 
-    await router.getReserves(
-      '0xbEE597Ad7674a9E92bc284515d35Fd20E2b81371',
-      '0x7FB799BeCD588f2f6395DCc17f54C1fF350D2464'
-    )
+//     await router.getReserves(
+//       '0xbEE597Ad7674a9E92bc284515d35Fd20E2b81371',
+//       '0x7FB799BeCD588f2f6395DCc17f54C1fF350D2464'
+//     )
 
-    const factory = await router.factory();
-    console.log('factory')
-    console.log(factory)
+//     const factory = await router.factory();
+//     console.log('factory')
+//     console.log(factory)
 
-    await router.addLiquidity(
-      '0xbEE597Ad7674a9E92bc284515d35Fd20E2b81371',
-      '0x7FB799BeCD588f2f6395DCc17f54C1fF350D2464',
-      10,
-      10,
-      5,
-      5,
-      accounts[1],
-      1893456000
-    )
-  }
-}
+//     await router.addLiquidity(
+//       '0xbEE597Ad7674a9E92bc284515d35Fd20E2b81371',
+//       '0x7FB799BeCD588f2f6395DCc17f54C1fF350D2464',
+//       10,
+//       10,
+//       5,
+//       5,
+//       accounts[1],
+//       1893456000
+//     )
+//   }
+// }
