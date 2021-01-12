@@ -6,24 +6,24 @@ module.exports = {
   networks: {
     development: {
       host: 'localhost',
-      port: 7545,
+      port: 8545,
       network_id: '*',
-      gas: 6721975,
+      gas: 6721975
     },
     ropsten: {
       provider: () => {
         return new HDWalletProvider({
           mnemonic: {
-            phrase: process.env.ROPSTEN_MNEMONIC,
+            phrase: process.env.ROPSTEN_MNEMONIC
           },
-          providerOrUrl: process.env.ROPSTEN_URL,
+          providerOrUrl: process.env.ROPSTEN_URL
         })
       },
       network_id: '3',
       gas: 4612388,
       confirmations: 2,
       timeoutBlocks: 200,
-      skipDryRun: true,
+      skipDryRun: true
     },
     kovan: {
       provider: () => new HDWalletProvider(process.env.KOVAN_MNEMONIC, process.env.KOVAN_URL),
@@ -31,15 +31,15 @@ module.exports = {
       gas: 5500000,
       confirmations: 2,
       timeoutBlocks: 200,
-      skipDryRun: true,
+      skipDryRun: true
     },
     main: {
       provider: () => {
         return new HDWalletProvider({
           mnemonic: {
-            phrase: process.env.MAIN_MNEMONIC,
+            phrase: process.env.MAIN_MNEMONIC
           },
-          providerOrUrl: process.env.MAIN_URL,
+          providerOrUrl: process.env.MAIN_URL
         })
       },
       network_id: '1',
@@ -48,24 +48,24 @@ module.exports = {
       gasPrice: 20000000000,
       confirmations: 2,
       timeoutBlocks: 100,
-      skipDryRun: false,
-    },
+      skipDryRun: false
+    }
   },
   solc: {
     optimizer: {
       enabled: true,
-      runs: 200,
-    },
+      runs: 200
+    }
   },
   compilers: {
     solc: {
-      version: '0.6.6',
-    },
+      version: '0.6.6'
+    }
   },
   mocha: {
     reporter: 'eth-gas-reporter',
     reporterOptions: {
-      currency: 'AUD',
-    },
-  },
+      currency: 'AUD'
+    }
+  }
 }
