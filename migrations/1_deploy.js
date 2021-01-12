@@ -4,7 +4,7 @@ module.exports = async (deployer, network, accounts) => {
   let factory = '0x00'
 
   if (network === 'kovan') {
-    factory = '0x8d883b92A89E50f328cd837D4af43f8023602cFf' // Kovan
+    factory = '0x57f3A5B59CF338a9aED9D14b01E9344CfDD3E121' // Kovan
   }
 
   if (network === 'development') {
