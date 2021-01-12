@@ -8,7 +8,7 @@ module.exports = async (deployer, network, accounts) => {
   }
 
   if (network === 'development') {
-    factory = '0x8f241c76ED026f6A64DC8FEf1D12eDdbc0F04Eb9' // Development
+    factory = '0x00008e5Cf47395f484B558F2f244CA2f22444349' // Development
   }
 
   if (network === 'ropsten') {
