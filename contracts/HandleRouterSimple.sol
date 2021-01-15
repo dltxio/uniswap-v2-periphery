@@ -37,9 +37,9 @@ contract HandleRouterSimple {
         uint256 amountBMin
     ) internal virtual returns (uint256 amountA, uint256 amountB) {
         // create the pair if it doesn't exist yet
-        if (IUniswapV2Factory(factory).getPair(tokenA, tokenB) == address(0)) {
-            IUniswapV2Factory(factory).createPair(tokenA, tokenB);
-        }
+        // if (IUniswapV2Factory(factory).getPair(tokenA, tokenB) == address(0)) {
+        //     IUniswapV2Factory(factory).createPair(tokenA, tokenB);
+        // }
 
         (uint256 reserveA, uint256 reserveB) = UniswapV2Library.getReserves(factory, tokenA, tokenB);
         if (reserveA == 0 && reserveB == 0) {
@@ -58,8 +58,9 @@ contract HandleRouterSimple {
         }
     }
 
-    function pairFor(address tokenA, address tokenB) public returns (address) {
-        address pair = UniswapV2Library.pairFor(factory, tokenA, tokenB);
+    function pairFor(address tokenA, address tokenB) public view returns (address) {
+        address pair = IUniswapV2Factory(factory).getPair(tokenA, tokenB);
+        //address pair = UniswapV2Library.pairFor(factory, tokenA, tokenB);
         return pair;
     }
 
@@ -87,7 +88,38 @@ contract HandleRouterSimple {
         )
     {
         (amountA, amountB) = _addLiquidity(tokenA, tokenB, amountADesired, amountBDesired, amountAMin, amountBMin);
+
         address pair = UniswapV2Library.pairFor(factory, tokenA, tokenB);
+
+        TransferHelper.safeTransferFrom(tokenA, msg.sender, pair, amountA);
+        TransferHelper.safeTransferFrom(tokenB, msg.sender, pair, amountB);
+
+        //liquidity = IUniswapV2Pair(pair).mint(to);
+
+        liquidity = 0;
+    }
+
+    function addLiquidity(
+        address tokenA,
+        address tokenB,
+        address pair,
+        uint256 amountADesired,
+        uint256 amountBDesired,
+        uint256 amountAMin,
+        uint256 amountBMin,
+        address to,
+        uint256 deadline
+    )
+        external
+        virtual
+        ensure(deadline)
+        returns (
+            uint256 amountA,
+            uint256 amountB,
+            uint256 liquidity
+        )
+    {
+        (amountA, amountB) = _addLiquidity(tokenA, tokenB, amountADesired, amountBDesired, amountAMin, amountBMin);
 
         TransferHelper.safeTransferFrom(tokenA, msg.sender, pair, amountA);
         TransferHelper.safeTransferFrom(tokenB, msg.sender, pair, amountB);
