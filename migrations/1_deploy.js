@@ -3,10 +3,14 @@ const Factory = artifacts.require('./Interfaces/IUniswapV2Factory')
 const Token = artifacts.require('./Interfaces/IERC20')
 
 module.exports = async (deployer, network, accounts) => {
+
+  console.log(accounts[0])
+  console.log(accounts[1])
+
   let factory_address = '0x00'
 
   if (network === 'kovan') {
-    factory_address = '0x9FF4B21B4d0a3A9E43ECDFaC9DDA70c3ebD87F5a' // Kovan
+    factory_address = '0xD49990AE372Ab209752981D3C081934E994056e3' // Kovan
   }
 
   if (network === 'development') {
@@ -22,7 +26,7 @@ module.exports = async (deployer, network, accounts) => {
   await deployer.deploy(HandleRouter, factory_address)
   const router = await HandleRouter.deployed()
   const _factory = await router.factory()
-  //console.log(_factory);
+  console.log(_factory);
 
   const factory = await Factory.at(_factory)
   console.log(factory.address)
@@ -44,6 +48,30 @@ module.exports = async (deployer, network, accounts) => {
   const pair = await factory.getPair(aud, jpy);
   console.log("pair")
   console.log(pair);
+
+  //Get tokens
+  const AUD_CONTRACT = await Token.at(aud);
+  const JPY_CONTRACT = await Token.at(jpy);
+
+  const aud_balance = await AUD_CONTRACT.balanceOf(accounts[0]);
+  const jpy_balance = await JPY_CONTRACT.balanceOf(accounts[0]);
+
+  console.log(Number(aud_balance));
+  console.log(Number(jpy_balance));
+
+  //Transfer to account 1
+  await AUD_CONTRACT.transfer(accounts[1], 10000);
+  await JPY_CONTRACT.transfer(accounts[1], 10000);
+
+  // Allow the router to transfer from the users account
+  //console.log(AUD_CONTRACT.address);
+  await AUD_CONTRACT.approve(router.address, 1000, {from: accounts[0]});
+  await AUD_CONTRACT.approve(router.address, 1000, {from: accounts[1]});
+
+  // Allow the router to transfer from the users account
+  //console.log(JPY_CONTRACT.address);
+  await JPY_CONTRACT.approve(router.address, 1000, {from: accounts[0]});
+  await JPY_CONTRACT.approve(router.address, 1000, {from: accounts[1]});
 
   const liquidity = await router.addLiquidity(
     aud,

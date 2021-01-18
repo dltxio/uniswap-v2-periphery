@@ -29,9 +29,11 @@ library UniswapV2Library {
     }
 
     // fetches and sorts the reserves for a pair
-    function getReserves(address factory, address tokenA, address tokenB) internal returns (uint reserveA, uint reserveB) {
+    function getReserves(address factory, address tokenA, address tokenB) internal view returns (uint reserveA, uint reserveB) {
         (address token0, address token1) = sortTokens(tokenA, tokenB);
-        address pair = pairFor(factory, tokenA, tokenB);
+        //address pair = pairFor(factory, tokenA, tokenB);
+        //address pair = pairFor(factory, tokenA, tokenB);
+        address pair = IUniswapV2Factory(factory).getPair(token0, token1);
         (uint reserve0, uint reserve1,) = IUniswapV2Pair(pair).getReserves();
         (reserveA, reserveB) = tokenA == token0 ? (reserve0, reserve1) : (reserve1, reserve0);
     }
