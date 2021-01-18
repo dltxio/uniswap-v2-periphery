@@ -27,37 +27,33 @@ module.exports = async (deployer, network, accounts) => {
   const factory = await Factory.at(_factory)
   console.log(factory.address)
 
+  let aud = '0x00'
+  let jpy = '0x00'
+
   // test liquidity
   if (network === 'kovan') {
-    
-    const aud = '0xabaf0c048Cb12d8D8f253e861ACe9d3303044F88'
-    const jpy = '0x2457D44852CD8A271a26682CA3C3eC1159c9189E'
-
-    //const pair = await router.getPair(aud, jpy);
-    //console.log(pair);
-
-    //const reserves = await router.getReserves(aud, jpy);
-    //console.log(reserves);
+    aud = '0xabaf0c048Cb12d8D8f253e861ACe9d3303044F88'
+    jpy = '0x2457D44852CD8A271a26682CA3C3eC1159c9189E'
   }
 
   if (network === 'development') {
-    const aud = '0x3098cE2de41ddceF66B5b0CD1957b0b8812D12c4'
-    const jpy = '0xde4F997e17830F1c5fDC03e10183cc74051d119e'
-
-    const pair = await factory.getPair(aud, jpy);
-    console.log("pair")
-    console.log(pair);
-
-    const liquidity = await router.addLiquidity(
-      '0xbEE597Ad7674a9E92bc284515d35Fd20E2b81371',
-      '0x7FB799BeCD588f2f6395DCc17f54C1fF350D2464',
-      pair,
-      10,
-      10,
-      5,
-      5,
-      accounts[1],
-      1893456000
-    )
+    aud = '0x3098cE2de41ddceF66B5b0CD1957b0b8812D12c4'
+    jpy = '0xde4F997e17830F1c5fDC03e10183cc74051d119e'
   }
+
+  const pair = await factory.getPair(aud, jpy);
+  console.log("pair")
+  console.log(pair);
+
+  const liquidity = await router.addLiquidity(
+    aud,
+    jpy,
+    pair,
+    10,
+    10,
+    5,
+    5,
+    accounts[1],
+    1893456000
+  )
 }
