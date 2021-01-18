@@ -6,7 +6,7 @@ module.exports = async (deployer, network, accounts) => {
   let factory_address = '0x00'
 
   if (network === 'kovan') {
-    factory_address = '0x96485389Ff0Ff6048f17BBaCce1E38074ee06838' // Kovan
+    factory_address = '0x9FF4B21B4d0a3A9E43ECDFaC9DDA70c3ebD87F5a' // Kovan
   }
 
   if (network === 'development') {
