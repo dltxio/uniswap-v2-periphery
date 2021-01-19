@@ -1,3 +1,4 @@
+# Archived and contracts moved into handle-vue repo
 # Uniswap V2
 
 [![Actions Status](https://github.com/Uniswap/uniswap-v2-periphery/workflows/CI/badge.svg)](https://github.com/Uniswap/uniswap-v2-periphery/actions)
